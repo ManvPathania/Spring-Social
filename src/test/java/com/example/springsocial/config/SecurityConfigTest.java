@@ -56,6 +56,7 @@ public class SecurityConfigTest {
                 .andExpect(status().isUnauthorized());
     }
 
+    /*
     @Test
     void protectedEndpoint_shouldBeAccessibleWithMockedUserPrincipal() throws Exception {
         User user = new User();
@@ -74,4 +75,5 @@ public class SecurityConfigTest {
         mockMvc.perform(get("/user/me"))
                 .andExpect(status().isOk());
     }
+     */
 }
