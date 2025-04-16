@@ -1,21 +1,49 @@
-name: Artifact Test
+name: Java CI with Maven and JaCoCo
 
 on:
-  workflow_dispatch:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
 jobs:
-  test-artifact:
+  build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+      - name: Check internet connectivity to GitHub
+        run: |
+          echo "Testing connection to GitHub..."
+          curl -I https://github.com
+          curl -I https://api.github.com/repos/actions/upload-artifact/releases
 
-      - name: Create dummy file
-        run: echo "hello world" > test.txt
+      - name: Clean and update runner environment
+        run: sudo apt-get update && sudo apt-get upgrade -y
 
-      - name: Upload dummy file
-        uses: actions/upload-artifact@v3
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
         with:
-          name: test-file
-          path: test.txt
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Cache Maven packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-maven
+
+      - name: Build with Maven
+        run: mvn clean verify
+
+      - name: List output files
+        run: ls -R target/site/
+
+      - name: Upload JaCoCo report
+        uses: actions/upload-artifact@v4
+        with:
+          name: jacoco-report
+          path: target/site/jacoco/
