@@ -1,1 +1,1 @@
-Spring Boot + Spring Security Project
+Spring Boot + Spring Security Project + JaCoCo
