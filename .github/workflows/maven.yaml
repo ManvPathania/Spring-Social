@@ -11,6 +11,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Clean and update runner environment
+        run: sudo apt-get update && sudo apt-get upgrade -y
+
       - name: Checkout code
         uses: actions/checkout@v3
 
@@ -30,8 +33,11 @@ jobs:
       - name: Build with Maven
         run: mvn clean verify
 
+      - name: List output files
+        run: ls -R target/site/
+
       - name: Upload JaCoCo report
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v3.2.0 # Updated to a specific version
         with:
           name: jacoco-report
           path: target/site/jacoco/
