@@ -11,6 +11,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Check internet connectivity to GitHub
+        run: |
+          echo "Testing connection to GitHub..."
+          curl -I https://github.com
+          curl -I https://api.github.com/repos/actions/upload-artifact/releases
+
       - name: Clean and update runner environment
         run: sudo apt-get update && sudo apt-get upgrade -y
 
@@ -37,7 +43,7 @@ jobs:
         run: ls -R target/site/
 
       - name: Upload JaCoCo report
-        uses: actions/upload-artifact@v3.2.0 # Updated to a specific version
+        uses: actions/upload-artifact@v3.1.2
         with:
           name: jacoco-report
           path: target/site/jacoco/
