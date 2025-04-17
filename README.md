@@ -1,1 +1,1 @@
-Spring Boot + Spring Security Project + JaCoCo
+Spring Boot + Spring Security + JaCoCo(Automated Test Coverage Report)
